@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+{% block title %}Search Results - Shadertoy Browser{% endblock %}
+{% block content %}
+<div class="search-results">
+    <h1>Search Results</h1>
+    
+    {% if query %}
+        <h2>Results for "{{ query }}"</h2>
+        <p>Found {{ total_results }} shader{{ 's' if total_results != 1 else '' }}</p>
+        
+        {% if shaders %}
+            <div class="shader-grid">
+                {% for shader in shaders %}
+                <div class="shader-card">
+                    <div class="shader-preview">
+                        <canvas id="canvas_{{ shader.id }}_sr" width="300" height="200" style="width: 100%; height: 100%; border-radius: 8px;"></canvas>
+                    </div>
+                    <div class="shader-info">
+                        <h3><a href="{{ url_for('shader_detail', shader_id=shader.id) }}">{{ shader.data.info.name if shader.data and shader.data.get('info') and shader.data.info.get('name') else shader.id }}</a></h3>
+                        <p>by <a href="#" class="user">{{ shader.data.info.username if shader.data and shader.data.get('info') and shader.data.info.get('username') else 'Unknown' }}</a></p>
+                        <p>{{ shader.data.info.description[:100] if shader.data and shader.data.get('info') and shader.data.info.get('description') else 'No description available' }}{% if shader.data and shader.data.get('info') and shader.data.info.get('description') and shader.data.info.description|length > 100 %}...{% endif %}</p>
+                        <div class="shader-stats">
+                            <span class="views">Views: {{ shader.data.info.viewed if shader.data and shader.data.get('info') and shader.data.info.get('viewed') else 0 }}</span>
+                            <span class="likes">Likes: {{ shader.data.info.likes if shader.data and shader.data.get('info') and shader.data.info.get('likes') else 0 }}</span>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            
+            {% if total_pages > 1 %}
+            <div class="pagination">
+                <span class="page-info">Page {{ page }} of {{ total_pages }}</span>
+                {% if page > 1 %}
+                    <a href="{{ url_for('search_page', q=query, page=page-1) }}" class="prev-page">&laquo; Previous</a>
+                {% endif %}
+                
+                {% for pageNum in range(start_page, end_page + 1) %}
+                    {% if pageNum == page %}
+                        <span class="current-page">{{ pageNum }}</span>
+                    {% else %}
+                        <a href="{{ url_for('search_page', q=query, page=pageNum) }}">{{ pageNum }}</a>
+                    {% endif %}
+                {% endfor %}
+                
+                {% if page < total_pages %}
+                    <a href="{{ url_for('search_page', q=query, page=page+1) }}" class="next-page">Next &raquo;</a>
+                {% endif %}
+            </div>
+            {% endif %}
+        {% else %}
+            <p>No shaders found matching your query.</p>
+        {% endif %}
+    {% else %}
+        <p>Please enter a search term.</p>
+    {% endif %}
+    
+    <div class="search-again">
+        <form action="{{ url_for('search_page') }}" method="get">
+            <input type="text" name="q" placeholder="Search for shaders..." value="{{ query or '' }}">
+            <button type="submit">Search</button>
+        </form>
+    </div>
+</div>
+
+<style>
+.search-results {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.shader-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    margin: 20px 0;
+}
+
+.shader-card {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.shader-preview {
+    height: 200px;
+    background-color: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.shader-info {
+    padding: 15px;
+}
+
+.shader-info h3 {
+    margin: 0 0 10px 0;
+    font-size: 1.2em;
+}
+
+.shader-info p {
+    margin: 0 0 10px 0;
+    color: #666;
+    font-size: 0.9em;
+    line-height: 1.4;
+}
+
+.shader-stats {
+    display: flex;
+    justify-content: space-between;
+}
+
+.pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.pagination a, .pagination span {
+    padding: 8px 12px;
+    text-decoration: none;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.pagination .current-page {
+    background-color: #404040;
+    color: white;
+    border-color: #404040;
+}
+
+.search-again {
+    margin-top: 30px;
+    padding: 20px;
+    background-color: #f5f5f5;
+    border-radius: 5px;
+}
+
+.search-again form {
+    display: flex;
+    gap: 10px;
+}
+
+.search-again input[type="text"] {
+    flex-grow: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.search-again button {
+    padding: 10px 20px;
+    background-color: #404040;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.search-again button:hover {
+    background-color: #505050;
+}
+</style>
+{% endblock %}

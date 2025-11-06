@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block content %}
+<div id="blockTop">
+    <div id="block0">
+        <div class="normalText"><a class="regular" href="{{ url_for('browse') }}">Featured Shaders</a></div>
+        <div class="shaderBig">
+            <!-- Feature a few popular shaders -->
+            {% if shaders %}
+                {% for shader in shaders[:1] %}
+                    <div class="shaderPreviewContainer" id="Preview_0_Container" style="visibility: visible;">
+                        <a class="shaderPreview shaderPreviewContent" id="Preview_0_Link" style="visibility: visible;" href="{{ url_for('shader_detail', shader_id=shader.id) }}">
+                            <div class="previewCanvas" id="Preview_0_Canvas" width="800" height="450" style="visibility: hidden; opacity: 0.0; background-color: rgb(0, 0, 0);">
+                                <canvas id="canvas_{{ shader.id }}" width="800" height="450" style="border: none; margin: 0px; display: inline-block; width: 100%; height: 100%; border-radius: 8px;"></canvas>
+                            </div>
+                        </a>
+                        <div class="previewInfo" id="Preview_0_Info" style="visibility: visible;">
+                            <span class="previewText" id="Preview_0_Text">{{ shader.data.info.name if shader.data and shader.data.get('info') else shader.id }}</span>
+                            <span>by</span>
+                            <span class="previewTextUser" id="Preview_0_TextUser">
+                                <a class="user" href="#">{{ shader.data.info.username if shader.data and shader.data.get('info') and shader.data.info.get('username') else 'Unknown' }}</a>
+                            </span>
+                            <span class="previewStats" id="Preview_0_Stats">
+                                Views: {{ shader.data.info.viewed if shader.data and shader.data.get('info') and shader.data.info.get('viewed') else 0 }}
+                                &nbsp;&nbsp;
+                                Likes: {{ shader.data.info.likes if shader.data and shader.data.get('info') and shader.data.info.get('likes') else 0 }}
+                            </span>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+
+    <div id="block1">
+        <div class="bigText">
+            <span class="boldText">Build</span> <span class="grayText">and </span><span class="boldText">Share</span> 
+            <span class="grayText">your best shaders with the world and get</span> 
+            <span class="boldText">Inspired</span>
+        </div>
+    </div>
+</div>
+
+<div id="blockBottom">
+    <div class="normalText"><a class="regular" href="{{ url_for('browse') }}">Recently Added Shaders</a></div>
+    <div id="blockPreviews">
+        {% if shaders %}
+            {% for shader in shaders[1:5] %}
+            <div class="shaderSmall">
+                <div class="shaderPreviewContainer" id="Preview_{{ loop.index }}_Container" style="visibility: visible;">
+                    <a class="shaderPreview shaderPreviewContent" id="Preview_{{ loop.index }}_Link" style="visibility: visible;" href="{{ url_for('shader_detail', shader_id=shader.id) }}">
+                        <div class="previewCanvas" id="Preview_{{ loop.index }}_Canvas" width="476" height="268" style="visibility: hidden; opacity: 0.0; background-color: rgb(0, 0, 0);">
+                            <canvas id="canvas_{{ shader.id }}_{{ loop.index }}" width="476" height="268" style="border: none; margin: 0px; display: inline-block; width: 100%; height: 100%; border-radius: 8px;"></canvas>
+                        </div>
+                    </a>
+                    <div class="previewInfo" id="Preview_{{ loop.index }}_Info" style="visibility: visible;">
+                        <span class="previewText" id="Preview_{{ loop.index }}_Text">{{ shader.data.info.name if shader.data and shader.data.get('info') else shader.id }}</span>
+                        <span>by</span>
+                        <span class="previewTextUser" id="Preview_{{ loop.index }}_TextUser">
+                            <a class="user" href="#">{{ shader.data.info.username if shader.data and shader.data.get('info') and shader.data.info.get('username') else 'Unknown' }}</a>
+                        </span>
+                        <span class="previewStats" id="Preview_{{ loop.index }}_Stats">
+                            Views: {{ shader.data.info.viewed if shader.data and shader.data.get('info') and shader.data.info.get('viewed') else 0 }}
+                            &nbsp;&nbsp;
+                            Likes: {{ shader.data.info.likes if shader.data and shader.data.get('info') and shader.data.info.get('likes') else 0 }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

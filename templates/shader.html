@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% block title %}{{ shader.data.info.name if shader.data and shader.data.get('info') and shader.data.info.get('name') else shader.id }} - Shadertoy Browser{% endblock %}
+{% block content %}
+<div class="shader-detail">
+    <h1>{{ shader.data.info.name if shader.data and shader.data.get('info') and shader.data.info.get('name') else shader.id }}</h1>
+    <div class="shader-meta">
+        <p><strong>Author:</strong> {{ shader.data.info.username if shader.data and shader.data.get('info') and shader.data.info.get('username') else 'Unknown' }}</p>
+        <p><strong>Published:</strong> {{ shader.data.info.date if shader.data and shader.data.get('info') and shader.data.info.get('date') else 'Unknown' }}</p>
+        <p><strong>Views:</strong> {{ shader.data.info.viewed if shader.data and shader.data.get('info') and shader.data.info.get('viewed') else 0 }}</p>
+        <p><strong>Likes:</strong> {{ shader.data.info.likes if shader.data and shader.data.get('info') and shader.data.info.get('likes') else 0 }}</p>
+    </div>
+    
+    <div class="shader-render">
+        <canvas id="shader-canvas" width="800" height="600" style="width: 100%; max-width: 800px; border: 1px solid #ccc;"></canvas>
+    </div>
+    
+    <div class="shader-description">
+        <h2>Description</h2>
+        <p>{{ shader.data.info.description if shader.data and shader.data.get('info') and shader.data.info.get('description') else 'No description available.' }}</p>
+    </div>
+    
+    {% if shader.data.get('renderpass') %}
+    <div class="shader-code">
+        <h2>Code</h2>
+        {% for pass in shader.data.renderpass %}
+        <div class="pass-block">
+            <h3>Pass {{ loop.index }} ({{ pass.type }})</h3>
+            <pre class="shader-source">{{ pass.code }}</pre>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+
+<style>
+.shader-detail {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.shader-meta {
+    background-color: #f5f5f5;
+    padding: 15px;
+    border-radius: 5px;
+    margin: 15px 0;
+}
+
+.shader-render {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.shader-description {
+    margin: 20px 0;
+}
+
+.shader-code {
+    margin: 20px 0;
+}
+
+.pass-block {
+    margin: 20px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 15px;
+}
+
+.shader-source {
+    background-color: #2d2d2d;
+    color: #f8f8f2;
+    padding: 15px;
+    border-radius: 5px;
+    overflow-x: auto;
+    font-size: 0.9em;
+    line-height: 1.4;
+}
+</style>
+
+<script>
+// Simple placeholder for shader rendering
+document.addEventListener('DOMContentLoaded', function() {
+    const canvas = document.getElementById('shader-canvas');
+    if (canvas) {
+        const ctx = canvas.getContext('2d');
+        // Draw a placeholder
+        ctx.fillStyle = '#000';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = '#ff8020';
+        ctx.font = '20px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText('Shader Preview Placeholder', canvas.width/2, canvas.height/2);
+        ctx.fillStyle = '#fff';
+        ctx.font = '16px Arial';
+        ctx.fillText('(Interactive shader would render here)', canvas.width/2, canvas.height/2 + 30);
+    }
+});
+</script>
+{% endblock %}

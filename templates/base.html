@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>{% block title %}Shadertoy Browser{% endblock %}</title>
+    <meta charset="utf-8">
+    <style>
+        {% include 'styles.css' ignore missing %}
+    </style>
+    <script>
+        {% include 'scripts.js' ignore missing %}
+    </script>
+</head>
+<body>
+    <div id="header">
+        <div id="headerBlock1">
+            <a href="{{ url_for('frontpage') }}" id="headerTitle">Shadertoy Browser</a>
+            <form name="formSearch" action="{{ url_for('search_page') }}" method="get" style="display:inline-block;">
+                <div id="headerSearch">
+                    <input type="search" id="mySearch" name="q" placeholder="Search..." value="{{ query or '' }}">
+                </div>
+            </form>
+        </div>
+        <div id="headerBlock2">
+            <a class="headerLinks" href="{{ url_for('browse') }}">Browse</a>
+            <a class="headerLinks" href="{{ url_for('frontpage') }}">Home</a>
+        </div>
+    </div>
+    
+    <div id="content">
+        {% block content %}{% endblock %}
+    </div>
+    
+    <div id="footer">
+        <div>
+            <span style="color:#ffffff;">Shader Browser</span>
+            <ul>
+                <li><a href="{{ url_for('browse') }}">Browse All Shaders</a></li>
+                <li><a href="{{ url_for('search_page') }}">Search</a></li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
