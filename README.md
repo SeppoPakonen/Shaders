@@ -1,10 +1,54 @@
 # Shadertoy Browser (15,067 shaders)
 
-A web application for browsing, searching, and viewing shaders from Shadertoy. This project allows you to run a local browser for Shadertoy shaders with search and pagination capabilities.
+A comprehensive toolkit for browsing, searching, and viewing shaders from Shadertoy. This project allows you to run a local browser for Shadertoy shaders with extensive search capabilities.
 
 ## Overview
 
-The Shadertoy Browser is a Flask-based web application that provides a local interface for viewing and searching through Shadertoy shaders. It comes with hundreds of pre-downloaded shaders ready to browse, and provides features like search, pagination, and detailed shader views.
+The Shadertoy Browser is a collection of tools for exploring the vast collection of Shadertoy shaders, featuring both a web interface and a powerful command-line search tool. It comes with thousands of pre-downloaded shaders ready to browse and search.
+
+## Search Tool (Most Important Feature!)
+
+The project includes a powerful command-line search tool (`search.py`) that enables sophisticated searching across all shader data:
+
+### Basic Search Options
+- `--tags <tag>`: Search by tags (e.g. `--tags game`)
+- `--name <text>`: Search in shader names
+- `--author <text>`: Search by author/username  
+- `--description <text>`: Search in descriptions
+
+### Resource Requirement Search
+- `--buffer`: Find shaders requiring buffers
+- `--cubemap`: Find shaders requiring cubemaps
+- `--image`: Find shaders requiring images
+- `--keyboard`: Find shaders requiring keyboard input
+- `--texture`: Find shaders requiring textures
+- `--video`: Find shaders requiring video input
+- `--sound`: Find shaders requiring sound input
+- `--library`: Find shaders requiring external libraries
+- `--webcam`: Find shaders requiring webcam input
+- And many more resource types...
+
+### Advanced Options
+- `--add-tags`: Add tag information from search_results to JSON files and analyze JSONs for resource dependencies
+- `--reindex`: Rebuild shader index cache
+- `--json-dir <dir>`: Specify directory with JSON shader files
+
+### Examples:
+```bash
+# Find all games requiring buffers
+python search.py --tags game --buffer
+
+# Find all games with keyboard input
+python search.py --tags game --keyboard
+
+# Find shaders by specific author
+python search.py --author iq
+
+# Find shaders using textures
+python search.py --texture --name "raymarching"
+```
+
+The search tool intelligently analyzes shader JSON files to detect resource requirements and combines this with the original requires data for comprehensive searching.
 
 ## Features
 
